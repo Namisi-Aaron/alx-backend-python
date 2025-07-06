@@ -8,11 +8,16 @@ data = 'user_data.csv'
 
 def connect_db():
     """ Connects to mysql database server"""
-    connection = mysql.connector.connect(
-        host="localhost",
-        user="username",
-        password="mypassword")
-    return connection
+    try:
+        return mysql.connector.connect(
+            host="localhost",
+            user="your_username",
+            password="your_password"
+        )
+    except mysql.connector.Error as err:
+        print(f"MySQL Error: {err}")
+        return None
+
 
 def create_database(connection):
     """Creates the database if it does not exist."""
