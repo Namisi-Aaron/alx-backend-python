@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 from .seed import connect_to_prodev
 
-def stream_users_in_batches(batch_size):
+def streamusersinbatches(batch_size):
     """Alternative version using context manager"""
     table_name = 'user_data'
     connection = connect_to_prodev()
