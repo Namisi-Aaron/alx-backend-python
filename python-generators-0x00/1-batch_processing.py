@@ -1,9 +1,10 @@
 #!/usr/bin/python3
 from .seed import connect_to_prodev
 
-def streamusersinbatches(batch_size):
+table_name = 'user_data'
+
+def stream_users_in_batches(batch_size):
     """Alternative version using context manager"""
-    table_name = 'user_data'
     connection = connect_to_prodev()
     
     cursor = connection.cursor(dictionary=True)
@@ -29,4 +30,3 @@ def batch_processing(batch_size):
         for user in batch:
             if user['age'] >= 25:
                 yield user
-
