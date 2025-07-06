@@ -1,17 +1,10 @@
+#!/usr/bin/python3
 import csv
 import mysql.connector
 
 database_name = 'ALX_prodev'
 table_name = 'user_data'
-csv_file_path = 'user_data.csv'
-
-
-def read_csv_generator(filepath):
-    """Yields rows from the CSV file as dictionaries."""
-    with open(filepath, mode='r', newline='', encoding='utf-8') as file:
-        reader = csv.DictReader(file)
-        for row in reader:
-            yield row
+data = 'user_data.csv'
 
 def connect_db():
     """ Connects to mysql database server"""
@@ -68,20 +61,20 @@ def insert_data(connection, data):
         INSERT INTO {table_name} (user_id, name, email, age)
         VALUES (%s, %s, %s, %s)
         '''
-        with connection.cursor() as cursor:
-            for row in data:
-                cursor.execute(insert_query, (
-                    row['user_id'],
-                    row['name'],
-                    row['email'],
-                    int(row['age'])
-                ))
+        with open(data, mode='r', newline='', encoding='utf-8') as file:
+            reader = csv.DictReader(file)
+            with connection.cursor() as cursor:
+                for row in reader:
+                    cursor.execute(insert_query, (
+                        row['user_id'],
+                        row['name'],
+                        row['email'],
+                        int(row['age'])))
+        
         connection.commit()
         connection.close()
 
-
-if __name__ == '__main__':
-    data = read_csv_generator(csv_file_path)
+if __name__ != '__main__':
     connection = connect_db()
     create_database(connection)
     connect_to_prodev()
