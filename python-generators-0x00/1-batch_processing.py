@@ -1,10 +1,10 @@
 #!/usr/bin/python3
-from .seed import connect_db
+from .seed import connect_to_prodev
 
 def stream_users_in_batches(batch_size):
     """Alternative version using context manager"""
-    table_name = 'users'
-    connection = connect_db()
+    table_name = 'user_data'
+    connection = connect_to_prodev()
     
     cursor = connection.cursor(dictionary=True)
     try:
@@ -13,9 +13,9 @@ def stream_users_in_batches(batch_size):
         '''
         cursor.execute(query)
         while True:
-            rows = cursor.fetchmany(batch_size)
-            if rows:
-                yield rows
+            batches = cursor.fetchmany(batch_size)
+            if batches:
+                yield batches
             else:
                 break
     finally:
