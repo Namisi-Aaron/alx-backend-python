@@ -11,7 +11,7 @@ def with_db_connection(func):
         conn = None
         try:
             conn = sqlite3.connect(db_path)
-            print(f"Successfully connected to SQLite database: {db_path}")
+            print(f"Successfully connected to database: {db_path}")
             result = func(conn, *args, **kwargs)
             return result
         except Error as e:
@@ -19,7 +19,7 @@ def with_db_connection(func):
         finally:
             if conn:
                 conn.close()
-                print(f"Database connection closed")
+                print(f"Connection closed")
     return wrapper
 
 @with_db_connection 
