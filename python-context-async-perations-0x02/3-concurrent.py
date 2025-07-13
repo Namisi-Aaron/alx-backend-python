@@ -27,12 +27,12 @@ async def fetch_concurrently():
             users = await cursor.fetchall()
             return users
         
-    results = asyncio.gather(
+    results = await asyncio.gather(
         async_fetch_users(),
         async_fetch_older_users()
     )
 
-    users, older_users = await results
+    users, older_users = results
     print(f"All users: {users}")
     print(f"Older users: {older_users}")
 
