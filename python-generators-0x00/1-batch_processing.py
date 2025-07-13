@@ -1,9 +1,9 @@
 #!/usr/bin/python3
-from .seed import connect_to_prodev
+seed = __import__('seed')
 
 def stream_users_in_batches(batch_size):
     """Alternative version using context manager"""
-    connection = connect_to_prodev()
+    connection = seed.connect_to_prodev()
     
     cursor = connection.cursor(dictionary=True)
     try:
