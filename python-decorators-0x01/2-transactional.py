@@ -7,6 +7,10 @@ db_path = os.path.join(BASE_DIR, 'my_database.db')
 
 
 def with_db_connection(func):
+    '''
+    Automatically connects to the SQLite database
+    and closes it after the function execution.
+    '''
     def wrapper(*args, **kwargs):
         conn = None
         try:
@@ -23,6 +27,11 @@ def with_db_connection(func):
     return wrapper
 
 def transactional(func):
+    '''
+    Wraps a function running a database operation inside a transaction.
+    If the function raises an error, rollback;
+    otherwise commit the transaction
+    '''
     def wrapper(connection, *args, **kwargs):
         try:
             func(connection, *args, **kwargs)

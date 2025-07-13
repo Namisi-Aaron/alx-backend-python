@@ -7,6 +7,10 @@ db_path = os.path.join(BASE_DIR, 'my_database.db')
 
 
 def with_db_connection(func):
+    '''
+    Automatically connects to the SQLite database
+    and closes it after the function execution.
+    '''
     def wrapper(*args, **kwargs):
         conn = None
         try:
