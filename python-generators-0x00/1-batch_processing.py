@@ -23,7 +23,11 @@ def batch_processing(batch_size):
     """
     Generator that yields batches of users in specified size.
     """
+    users_list = []
+
     for batch in stream_users_in_batches(batch_size):
         for user in batch:
             if user['age'] >= 25:
-                yield user
+                users_list.append(user)
+        
+        return users_list
