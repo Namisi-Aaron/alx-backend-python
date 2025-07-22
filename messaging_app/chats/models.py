@@ -1,4 +1,5 @@
-from csv import unregister_dialect
+import uuid
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -15,6 +16,7 @@ class User(AbstractUser):
     It includes additional fields such as:
       user_id, email, password_hash, role, and phone_number.
     """
+    id = uuid.uuid4()
     user_id = models.UUIDField(primary_key=True, editable=False)
     email = models.EmailField(unique=True)
     password_hash = models.CharField(max_length=100, null=False)
