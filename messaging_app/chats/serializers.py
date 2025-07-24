@@ -4,12 +4,11 @@ from .models import User, Message, Conversation
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'email', 'phone_number', 'role']
+        fields = ['first_name', 'last_name', 'email', 'password_hash', 'phone_number', 'role']
         read_only_fields = ['user_id', 'created_at']
 
 class MessageSerializer(serializers.ModelSerializer):
     sender_id = serializers.CharField(source='sender.user_id', read_only=True)
-    recipient_id = serializers.CharField(source='recipient.user_id', read_only=True)
 
     class Meta:
         model = Message

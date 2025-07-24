@@ -28,7 +28,7 @@ class Conversation(models.Model):
     Conversation model represents a conversation between two users.
     """
     conversation_id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
-    participants_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='conversations')
+    participants_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='conversation_participants')
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
