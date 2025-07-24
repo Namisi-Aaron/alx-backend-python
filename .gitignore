@@ -3,4 +3,7 @@ venv
 *.db
 dummy.py
 with_db_connection.py
+migrations/
+*.sqlite3
 __pycache__/
+*.pyc
