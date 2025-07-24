@@ -8,8 +8,8 @@ class UserSerializer(serializers.ModelSerializer):
         read_only_fields = ['user_id', 'created_at']
 
 class MessageSerializer(serializers.ModelSerializer):
-    sender_id = serializers.ReadOnlyField(source='sender.user_id')
-    recipient_id = serializers.ReadOnlyField(source='recipient.user_id')
+    sender_id = serializers.CharField(source='sender.user_id', read_only=True)
+    recipient_id = serializers.CharField(source='recipient.user_id', read_only=True)
 
     class Meta:
         model = Message
@@ -17,10 +17,16 @@ class MessageSerializer(serializers.ModelSerializer):
         read_only_fields = ['message_id', 'sent_at']
 
 class ConversationSerializer(serializers.ModelSerializer):
-    participants_id = UserSerializer(many=True, read_only=True)
-    messages = MessageSerializer(many=True, read_only=True)
+    participants_id = serializers.SerializerMethodField()
+    messages = serializers.SerializerMethodField()
 
     class Meta:
         model = Conversation
         fields = ['participants_id', 'messages']
         read_only_fields = ['conversation_id', 'created_at']
+    
+    def get_participants_id(self, obj):
+        return [user.user_id for user in obj.participants.all()]
+    
+    def get_messages(self, obj):
+        return [message.message_id for message in obj.messages.all()]
