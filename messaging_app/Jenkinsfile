@@ -1,9 +1,9 @@
 pipeline {
     agent any
 
-    // tools {
-    //     python 'Python3'   // You may need to configure in Jenkins: Manage Jenkins → Global Tool Configuration
-    // }
+    tools {
+        python 'Python3'   // You may need to configure in Jenkins: Manage Jenkins → Global Tool Configuration
+    }
 
     stages {
         stage('Checkout') {
