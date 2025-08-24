@@ -1,11 +1,17 @@
 pipeline {
     agent any
 
+    environment {
+        PYTHONPATH = "${WORKSPACE}/messaging_app"
+        PYTHON_VENV = "${WORKSPACE}/messaging_app/venv"
+        GITHUB_CREDENTIALS = credentials('github-token')
+    }
+
     stages {
-        stage('Checkout') {
+        stage('Checkout Code') {
             steps {
                 git branch: 'main',
-                credentialsId: 'github-token',
+                credentialsId: '${GITHUB_CREDENTIALS}',
                 url: 'https://github.com/Namisi-Aaron/alx-backend-python.git'
             }
         }
@@ -14,8 +20,9 @@ pipeline {
             steps {
                 dir('messaging_app') {
                     sh '''
-                        python -m venv venv
-                        . venv/bin/activate
+                        python -m venv ${PYTHON_VENV}
+                        source ${PYTHON_VENV}/bin/activate
+                        pip install --upgrade pip
                         pip install -r requirements.txt
                     '''
                 }
@@ -25,7 +32,7 @@ pipeline {
         stage('Run Tests') {
             steps {
                 sh '''
-                    . venv/bin/activate
+                    source ${PYTHON_VENV}/bin/activate
                     pytest --junitxml=reports/test-results.xml
                 '''
             }
@@ -40,7 +47,7 @@ pipeline {
 
     post {
         always {
-            archiveArtifacts artifacts: 'reports/**/*.xml', fingerprint: true
+            archiveArtifacts artifacts: 'reports/**/*.xml'
         }
         failure {
             echo 'Build failed! Check logs.'
