@@ -16,7 +16,8 @@ pipeline {
         stage('Setup Python') {
             steps {
                 sh '''
-                    virtualenv venv -p python3
+                    #!/bin/bash
+                    python3 -m venv venv
                     source venv/bin/activate
                     pip install --upgrade pip
                     pip install -r requirements.txt
