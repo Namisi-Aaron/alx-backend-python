@@ -1,36 +1,25 @@
 pipeline {
-    agent {
-        docker {
-            image 'python:3.9'
-            args '-u root:root'
-        }
-    }
+    agent any
 
     environment {
-        PYTHONPATH = "${WORKSPACE}/messaging_app"
-        PYTHON_VENV = "${WORKSPACE}/messaging_app/venv"
-        GITHUB_CREDENTIALS = credentials('github-token')
+        PYTHON_VENV = 'venv'
     }
 
     stages {
-        stage('Checkout Code') {
+        stage('Checkout') {
             steps {
-                git branch: 'main',
-                credentialsId: 'github-token',
-                url: 'https://github.com/Namisi-Aaron/alx-backend-python.git'
+                git 'https://github.com/Namisi-Aaron/alx-backend-python.git'
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Setup Python') {
             steps {
-                dir('messaging_app') {
-                    sh '''
-                        python3 -m venv ${PYTHON_VENV}
-                        source ${PYTHON_VENV}/bin/activate
-                        pip install --upgrade pip
-                        pip install -r requirements.txt
-                    '''
-                }
+                sh '''
+                    python3 -m venv ${PYTHON_VENV}
+                    source ${PYTHON_VENV}/bin/activate
+                    pip install --upgrade pip
+                    pip install -r requirements.txt
+                '''
             }
         }
 
@@ -38,27 +27,18 @@ pipeline {
             steps {
                 sh '''
                     source ${PYTHON_VENV}/bin/activate
-                    pytest --junitxml=reports/test-results.xml
+                    python manage.py test
                 '''
-            }
-        }
-
-        stage('Publish Test Report') {
-            steps {
-                junit 'reports/test-results.xml'
             }
         }
     }
 
     post {
-        always {
-            archiveArtifacts artifacts: 'reports/**/*.xml'
+        success {
+            echo 'Build and tests passed!'
         }
         failure {
-            echo 'Build failed! Check logs.'
-        }
-        success {
-            echo 'Build succeeded!'
+            echo 'Build failed. Check logs.'
         }
     }
 }
