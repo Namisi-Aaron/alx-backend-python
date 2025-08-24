@@ -13,6 +13,13 @@ pipeline {
             }
         }
 
+        stage('Verify Python') {
+            steps {
+                sh 'which python3 || echo "Python 3 is not installed"'
+                sh 'python3 --version || echo "Python 3 is not installed"'
+            }
+        }
+
         stage('Setup Python') {
             steps {
                 sh '''
