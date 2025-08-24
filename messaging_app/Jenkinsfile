@@ -14,13 +14,22 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'pip install -r requirements.txt'
+                dir('messaging_app') {
+                    sh '''
+                        python -m venv venv
+                        . venv/bin/activate
+                        pip install -r requirements.txt
+                    '''
+                }
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh 'pytest --junitxml=reports/test-results.xml'
+                sh '''
+                    . venv/bin/activate
+                    pytest --junitxml=reports/test-results.xml
+                '''
             }
         }
 
