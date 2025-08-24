@@ -1,8 +1,9 @@
 pipeline {
-    agent any
-
-    tools {
-        python 'Python3'
+    agent {
+        docker {
+            image 'python:3.10'
+            args '-v /tmp:/tmp'
+        }
     }
 
     stages {
