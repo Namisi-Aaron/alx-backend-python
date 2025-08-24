@@ -3,6 +3,9 @@ pipeline {
 
     environment {
         PYTHON_VENV = 'venv'
+        DOCKER_IMAGE = 'messaging-app'
+        DOCKER_TAG = 'latest'
+        DOCKER_CREDENTIALS_ID = ''
     }
 
     stages {

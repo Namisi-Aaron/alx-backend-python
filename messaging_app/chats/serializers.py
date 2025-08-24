@@ -17,12 +17,6 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
-
-# chats/serializers.py
-from rest_framework import serializers
-from django.conf import settings
-from .models import Message
-
 class MessageSerializer(serializers.ModelSerializer):
     sender_id = serializers.ReadOnlyField(source='sender_id.user_id')  # Output sender's UUID
 
@@ -40,18 +34,6 @@ class MessageSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("User must be authenticated to send a message.")
         validated_data['sender_id'] = user
         return super().create(validated_data)
-
-# class MessageSerializer(serializers.ModelSerializer):
-#     sender_id = serializers.PrimaryKeyRelatedField(
-#         queryset=User.objects.all(),
-#         default=serializers.CurrentUserDefault()
-#     )
-#     class Meta:
-#         model = Message
-#         fields = ['sender_id', 'recipient_id', 'message_body']
-
-#     def get_sender_id(self, obj):
-#         return obj.sender_id.user_id
 
 class ConversationSerializer(serializers.ModelSerializer):
     participants_id = serializers.SerializerMethodField()
